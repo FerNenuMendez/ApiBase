@@ -1,4 +1,4 @@
-import { TurnosDb } from '../managers/turnoManager.js'
+import { TurnosDb } from '../dao/models/turnoManager.js'
 
 const newDB = new TurnosDb()
 
