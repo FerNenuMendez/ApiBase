@@ -1,17 +1,14 @@
 import { MensajesManager } from '../mongodb/mongodb.js'
 import { TurnoManager } from '../mongodb/mongodb.js'
+import { newDB } from '../controllers/turnoController.js'
 
 export function onConnection(socketServer) {
     return async function (socket) {
-        console.log('socket conectado')
+        console.log('socket CHAT conectado')
         console.log('se conectó ' + socket.handshake.auth.usuario)
         socket.broadcast.emit(
             'nuevoUsuario',
             socket.handshake.auth.usuario)
-        socket.emit(
-            'turnos',
-            await TurnoManager.find().lean()
-        )
         socket.emit(
             'mensajes',
             await MensajesManager.find().lean()
@@ -33,10 +30,12 @@ export function onConnection(socketServer) {
 
 export function tiempoReal(socketServer) {
     return function (req, res, next) {
+        console.log('socket TURNOS conectado')
         res['mostrarTurnos'] = async () => {
+            const turnosDB = await newDB.getDb()
             socketServer.emit(
-                'turnos',
-                await TurnoManager.find().lean()
+                'turnosTimeReal',
+                turnosDB
             )
         }
         next()

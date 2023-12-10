@@ -1,7 +1,7 @@
 import { TurnoManager } from '../mongodb/mongodb.js'
 
 
-const newDB = new TurnoManager
+export const newDB = new TurnoManager
 
 export async function getController(req, res) {
     const { limit } = req.query
