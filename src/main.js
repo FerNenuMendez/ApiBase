@@ -3,7 +3,7 @@ import handlebars from 'express-handlebars'
 import { Server } from 'socket.io'
 import { turnoRouter } from './routers/turnoRouter.js';
 import { webRouter } from "./routers/webRouter.js";
-import { onConnection } from "./sockets/socketController.js";
+import { onConnection, tiempoReal } from "./sockets/socketController.js";
 
 const app = express()
 app.use(express.json())
@@ -19,6 +19,7 @@ const server = app.listen(PORT, () => {
 const websocketServer = new Server(server)
 websocketServer.on('connection', onConnection(websocketServer))
 
+app.use(tiempoReal(websocketServer))
 app.use('/static', express.static('./static'))
 
 app.use(turnoRouter)

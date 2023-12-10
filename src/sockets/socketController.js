@@ -1,13 +1,17 @@
 import { MensajesManager } from '../mongodb/mongodb.js'
+import { TurnoManager } from '../mongodb/mongodb.js'
 
 export function onConnection(socketServer) {
     return async function (socket) {
         console.log('socket conectado')
         console.log('se conectó ' + socket.handshake.auth.usuario)
-
         socket.broadcast.emit(
             'nuevoUsuario',
             socket.handshake.auth.usuario)
+        socket.emit(
+            'turnos',
+            await TurnoManager.find().lean()
+        )
         socket.emit(
             'mensajes',
             await MensajesManager.find().lean()
@@ -24,5 +28,17 @@ export function onConnection(socketServer) {
                 'usuarioDesconectado',
                 socket.handshake.auth.usuario)
         })
+    }
+}
+
+export function tiempoReal(socketServer) {
+    return function (req, res, next) {
+        res['mostrarTurnos'] = async () => {
+            socketServer.emit(
+                'turnos',
+                await TurnoManager.find().lean()
+            )
+        }
+        next()
     }
 }

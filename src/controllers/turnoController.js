@@ -1,6 +1,7 @@
-import { TurnosDb } from '../dao/models/turnoManager.js'
+import { TurnoManager } from '../mongodb/mongodb.js'
 
-const newDB = new TurnosDb()
+
+const newDB = new TurnoManager
 
 export async function getController(req, res) {
     const { limit } = req.query
@@ -8,11 +9,11 @@ export async function getController(req, res) {
 }
 
 export async function getControllerId(req, res) {
-    const id = Number(req.params.id)
-    const buscado = await newDB.getTurnoByID(id)
-    if (!buscado) {
+    const id = (req.params.id)
+    const buscado = await newDB.getTurnoById(id)
+    if (!buscado._eventsCount === 0) {
         res.status(404).json({
-            message: `turno con id ${id} no encontrado`
+            message: `Carrito con id ${id} not found`
         })
     } else {
         res.json(buscado)
@@ -20,20 +21,33 @@ export async function getControllerId(req, res) {
 }
 
 export async function postController(req, res) {
-    const { nombre, usuario, fecha, hora } = req.body
-    const data = { nombre, usuario, fecha, hora }
+    const { nombre, usuario, fecha, hora } = req.body;
+
     try {
-        const turno = await newDB.nuevoTurno(data)
-        res.json(turno)
+        const turnoData = {
+            nombre: {
+                pila: nombre.pila,
+                apellido: nombre.apellido
+            },
+            usuario,
+            fecha,
+            hora,
+            status: true
+        };
+
+        const turno = await newDB.nuevoTurno(turnoData);
+        res.json(turno);
     } catch (error) {
+        console.error(error);
         res.status(400).json({
-            message: `No se ha podido agregar el turno`
-        })
+            message: 'No se ha podido agregar el turno'
+        });
     }
 }
 
+
 export async function deleteController(req, res) {
-    const id = Number(req.params.id)
+    const id = (req.params.id)
     try {
         const borrado = await newDB.deleteTurno(id)
         res.json(borrado)
