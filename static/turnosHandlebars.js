@@ -1,13 +1,13 @@
-const ul = document.getElementById('ulTurnos')
+const divC = document.getElementById('div_Container')
 
 function mostrarTurnos() {
     const socket = io()
-    socket.on('turnosTimeReal', turnos => {
-        ul.innerHTML = ''
-        for (const { _id, usuario, fecha, hora } of turnos) {
-            const li = document.createElement('li')
-            li.innerHTML = `(ID: ${_id}, Usuario: ${usuario}): ${fecha}, ${hora}`
-            ul?.appendChild(li)
-        }
+    socket.on('turnosTomados', turnos => {
+        const turnosHTML = turnos.map(turno => `
+        <h3>${turno.nombre.pila} ${turno.nombre.apellido}</h3>
+        <h4> ${turno.fecha}, ${turno.hora} </h4>
+        `)
+        divC.innerHTML = turnosHTML
     })
 }
+mostrarTurnos()

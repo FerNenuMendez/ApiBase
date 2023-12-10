@@ -36,6 +36,7 @@ export async function postController(req, res) {
         };
 
         const turno = await newDB.nuevoTurno(turnoData);
+        res['mostrarTurnos']()
         res.json(turno);
     } catch (error) {
         console.error(error);
