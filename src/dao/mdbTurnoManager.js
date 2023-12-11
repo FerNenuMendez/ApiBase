@@ -1,21 +1,22 @@
 import { Schema, model } from "mongoose";
-import { randomUUID } from 'node:crypto'
+
 
 
 const turnoSchema = new Schema({
     nombre: {
-        pila: { type: String, required: true },
-        apellido: { type: String, required: true }
+        pila: { type: String, required: true, unique: false },
+        apellido: { type: String, required: true, unique: false }
     },
-    usuario: { type: String, required: true, unique: true },
-    fecha: { type: String, required: true },
-    hora: { type: String, required: true },
+    usuario: { type: String, required: true, unique: false },
+    email: { type: String, required: true, unique: false },
+    servicio: { type: String, required: true, unique: false },
+    fecha: { type: String, required: true, unique: false },
+    hora: { type: String, required: true, unique: false },
     status: { type: Boolean }
 }, {
     strict: 'throw',
     versionKey: false,
     statics: {
-
     },
     methods: {
         nuevoTurno: async function (data) {
@@ -45,6 +46,55 @@ const turnoSchema = new Schema({
                 return turno;
             } else {
                 console.log(`Turno con ${id}, no encontrado`);
+            }
+        },
+
+        getTurnoByUsuario: async function (usuario) {
+            const user = await this.model('turnos').find({ usuario: usuario }).lean();
+            if (user) {
+                return user;
+            } else {
+                console.log(`User con ${usuario}, no encontrado`);
+            }
+        },
+
+        getTurnoByNombre: async function (nombre) {
+            try {
+                const user = await this.model('turnos').find({ 'nombre.pila': nombre }).lean();
+                if (user.length > 0) {
+                    return user;
+                } else {
+                    console.log(`Usuario con nombre ${nombre} no encontrado`);
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error al buscar el usuario:', error);
+                throw error;
+            }
+        },
+
+        getTurnoBySurname: async function (nombre) {
+            try {
+                const user = await this.model('turnos').find({ 'nombre.apellido': nombre }).lean();
+                if (user.length > 0) {
+                    return user;
+                } else {
+                    console.log(`Usuario con apellido ${nombre} no encontrado`);
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error al buscar el usuario:', error);
+                throw error;
+            }
+        },
+
+
+        getTurnoByDate: async function (fecha) {
+            const user = await this.model('turnos').find({ fecha: fecha }).lean();
+            if (user) {
+                return user;
+            } else {
+                console.log(`Busqueda con ${fecha}, no encontrada`);
             }
         },
 
