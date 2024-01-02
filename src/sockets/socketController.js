@@ -4,8 +4,6 @@ import { newDB } from '../controllers/turnoController.js'
 
 export function onConnection(socketServer) {
     return async function (socket) {
-        console.log('socket CHAT conectado')
-        console.log('se conectó ' + socket.handshake.auth.usuario)
         socket.broadcast.emit(
             'nuevoUsuario',
             socket.handshake.auth.usuario)
@@ -29,6 +27,10 @@ export function onConnection(socketServer) {
                 'usuarioDesconectado',
                 socket.handshake.auth.usuario)
         })
+        socket.on('crearTurno', (datosTurno) => {
+            console.log('Turno creado con los siguientes datos:', datosTurno);
+            socket.emit('turnoCreado', 'Se ha creado un nuevo turno');
+        })
     }
 }
 
@@ -44,3 +46,5 @@ export function tiempoReal(socketServer) {
         next()
     }
 }
+
+

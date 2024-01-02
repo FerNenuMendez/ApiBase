@@ -96,31 +96,50 @@ export async function getControllerDate(req, res) {
     }
 }
 
-export async function postController(req, res) {
-    const { nombre, usuario, fecha, hora, servicio, status, email } = req.body;
-    try {
-        const turnoData = {
-            nombre: {
-                pila: nombre.pila,
-                apellido: nombre.apellido
-            },
-            email,
-            usuario,
-            servicio,
-            fecha,
-            hora,
-            status
-        };
-        const turno = await newDB.nuevoTurno(turnoData);
-        res['mostrarTurnos']()
-        res.json(turno);
-    } catch (error) {
-        console.error(error);
-        res.status(400).json({
-            message: 'No se ha podido agregar el turno'
-        });
-    }
-}
+// export async function getControllerMail(req, res) {
+//     try {
+//         const email = req.params.email;
+//         const buscado = await newDB.getTurnoByMail(email);
+//         if (!buscado) {
+//             res.status(404).json({
+//                 message: `Turno con email ${email} no encontrado`
+//             });
+//         } else {
+//             res.json(buscado);
+//         }
+//     } catch (error) {
+//         console.error('Error al obtener el turno:', error);
+//         res.status(500).json({
+//             message: 'Error interno del servidor al obtener el email'
+//         });
+//     }
+// }
+
+// export async function postController(req, res) {
+//     const { nombre, usuario, fecha, hora, servicio, status, email } = req.body;
+//     try {
+//         const turnoData = {
+//             nombre: {
+//                 pila: nombre.pila,
+//                 apellido: nombre.apellido
+//             },
+//             email,
+//             usuario,
+//             servicio,
+//             fecha,
+//             hora,
+//             status
+//         };
+//         const turno = await newDB.nuevoTurno(turnoData);
+//         res['mostrarTurnos']()
+//         res.json(turno);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(400).json({
+//             message: 'No se ha podido agregar el turno'
+//         });
+//     }
+// }
 
 export async function deleteController(req, res) {
     const id = (req.params.id)

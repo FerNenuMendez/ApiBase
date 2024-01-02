@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose'
 
+const collection = 'mensajes'
 
 const mensajeSchema = new Schema({
     timestamp: { type: Date },
@@ -10,8 +11,6 @@ const mensajeSchema = new Schema({
     versionKey: false,
     statics: {
     },
-    methods: {
-    }
 })
 
-export const MensajesManager = model('mensajes', mensajeSchema)
+export const MensajesManager = model(collection, mensajeSchema)

@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
+import { MONGODB } from '../config.js'
 
-await mongoose.connect('mongodb://127.0.0.1:27017/turnero')
+await mongoose.connect(MONGODB)
 
 export { MensajesManager } from '../dao/mdbChatManager.js'
 export { TurnoManager } from '../dao/mdbTurnoManager.js'
+export { UsuarioManager } from '../dao/mdbUserManager.js'

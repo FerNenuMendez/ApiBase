@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-
+const collection = 'turnos'
 
 const turnoSchema = new Schema({
     nombre: {
@@ -101,8 +101,8 @@ const turnoSchema = new Schema({
         deleteTurno: async function (id) {
             const borrado = await model('turnos').deleteOne({ _id: id }).lean()
             return borrado
-        }
+        },
     }
 })
 
-export const TurnoManager = model('turnos', turnoSchema)
+export const TurnoManager = model(collection, turnoSchema)
